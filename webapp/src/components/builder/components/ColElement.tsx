@@ -1,4 +1,4 @@
-import { ReactNode } from "react"
+import { ReactNode, useMemo } from "react"
 import { TreeNode, TreeType } from "../core/TreeNode"
 import { useDroppable } from "@dnd-kit/core";
 
@@ -9,19 +9,17 @@ interface Props {
 }
 
 export default function ColElement(props: Props) {
-	const drop = useDroppable({
-		id: props.data.id,
-		data: {
-			data: {...props.data},
-			path: props.path
+	const classes = useMemo(() => {
+		if (props.data && props.data.classes) {
+			return  Object.values(props.data.classes).join(' ')
+		} else {
+			return '';
 		}
-	});
+
+	}, []);
 
 	return (
-		<div ref={(ref) => {
-			drop.setNodeRef(ref)
-		}}>
-			Col {props.path}
+		<div className={`${classes}`}>
 			{props.children}
 		</div>
 	)

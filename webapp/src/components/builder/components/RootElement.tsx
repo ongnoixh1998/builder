@@ -1,6 +1,5 @@
 import { ReactNode, useMemo } from "react"
-import { TreeNode, TreeType } from "../core/TreeNode"
-import { useDroppable } from "@dnd-kit/core"
+import { TreeType } from "../core/TreeNode"
 
 interface Props {
 	data: TreeType,
@@ -20,7 +19,6 @@ export default function RootElement(props: Props) {
 
 	return (
 		<div className={`min-h-screen pb-5${classes}`}>
-			Root {props.path}
 			{props.children}
 		</div>
 	)
