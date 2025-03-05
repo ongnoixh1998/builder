@@ -1,5 +1,6 @@
 import BuilderElement from "../core/BuilderElement"
 import { TreeType } from "../core/TreeNode"
+import DragDropElement from "./DragDropElement";
 
 interface Props {
 	data?: TreeType,
@@ -16,9 +17,12 @@ export default function BaseElement(props: Props) {
 		});
 
 		return (
-			<El {...{data: {...data}, path: props.path}} key={props.path}>
-				{children}
-			</El>
+			<DragDropElement {...{data: {...data}, path: props.path}} key={props.path}>
+				<El {...{data: {...data}, path: props.path}} key={props.path}>
+					{children}
+				</El>
+			</DragDropElement>
+
 		)
 	}
 

@@ -2,7 +2,7 @@ export interface TreeType {
 	id: string,
 	type:string,
 	children?: TreeType[],
-	classes?:string,
+	classes?:any,
 }
 
 export class TreeNode {

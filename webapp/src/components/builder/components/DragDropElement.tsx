@@ -1,27 +1,58 @@
+import { useDroppable } from "@dnd-kit/core";
 import BuilderElement from "../core/BuilderElement"
 import { TreeType } from "../core/TreeNode"
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 
 interface Props {
-	data: TreeType
+	data: TreeType,
+	path: string,
+	children: ReactNode
 }
 
 export default function DragDropElement(props: Props) {
-	const WithElement = (data:TreeType) => {
-		const El = BuilderElement[data.type];
-		const children = data.children?.map((child) => {
-			return DragDropElement({data: child})
-		});
+	const [hover, setHover] = useState(false);
+	const [ref, setRef] = useState<any>(null);
 
-		return (
-			<El {...{data: {...data}}}>
-				{children}
-			</El>
-		)
+	const documentClick = (e:any) => {
+		if (e.target.parentNode != ref) {
+			setHover(false);
+		}
 	}
 
+	useEffect(() => {
+		document.addEventListener('click', documentClick)
+
+		return () => {
+			document.removeEventListener('click', documentClick)
+		}
+	}, [ref]);
+
+	const drop = useDroppable({
+		id: props.data.id,
+		data: {
+			data: {...props.data},
+			path: props.path
+		}
+	});
+
+	const isOver = drop.isOver ? ' border border-red-400 ' : ''
+
+	const handleClick = (e:React.MouseEvent) => {
+		e.preventDefault();
+		e.stopPropagation();
+		setHover(true);
+	}
+
+	const isHover = useMemo(() => {
+		return hover ? ' border border-cyan-400 ' : ''
+	}, [hover]);
+
 	return (
-		<>
-			{WithElement(props.data)}
-		</>
+		<div ref={(e) => {
+			drop.setNodeRef(e);
+			setRef(e);
+		} } className={`h-auto${isOver}${isHover}`} onClick={handleClick}>
+			{props.children}
+		</div>
 	)
 }

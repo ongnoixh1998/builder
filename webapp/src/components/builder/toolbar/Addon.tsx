@@ -3,7 +3,8 @@ import { useDraggable } from "@dnd-kit/core";
 interface Props {
 	name: string,
 	icon: any,
-	component?: any
+	component?: any,
+	classes?: any
 }
 
 export default function Addon(props: Props) {
@@ -11,7 +12,9 @@ export default function Addon(props: Props) {
 		id: props.name,
 		data: {
 			group: 'addon',
-			type: props.name
+			type: props.name,
+			classes: props.classes
+
 		}
 	});
 	

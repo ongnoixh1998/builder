@@ -26,7 +26,11 @@ export default function Builder() {
 					{
 						name: 'Row',
 						group: 'Layout',
-						icon: BsLayoutThreeColumns
+						icon: BsLayoutThreeColumns,
+						classes: {
+							height: 'min-h-20',
+							padding: 'pt-2 pb-2'
+						}
 					},
 					{
 						name: 'Col',
@@ -65,7 +69,6 @@ export default function Builder() {
 	}
 
 	const onDragEnd = (e:DragEndEvent) => {
-
 		if (e.active.id === 'toolbar' && toolbar.coordinate) {
 			setToolbar({...toolbar, coordinate: {
 				x: toolbar.coordinate.x + e.delta.x,
@@ -76,9 +79,11 @@ export default function Builder() {
 		if (e.active?.data?.current?.group == 'addon') {
 			treeNode.addNode(e.over?.data?.current?.path, {
 				id: '',
-				type: e.active?.data?.current?.type
+				type: e.active?.data?.current?.type,
+				classes: e.active?.data?.current?.classes
 			})
 		}
+		console.log(e.active, e.over)
 	}
 
 	const getDragOverLay = () => {

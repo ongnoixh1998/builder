@@ -2,7 +2,8 @@ export interface AddonType {
 	name: string,
 	icon: any,
 	group: string,
-	component?: any
+	component?: any,
+	classes?:any
 }
 
 export interface Tool {

@@ -1,4 +1,4 @@
-import { ReactNode } from "react"
+import { ReactNode, useMemo } from "react"
 import { TreeNode, TreeType } from "../core/TreeNode"
 import { useDroppable } from "@dnd-kit/core"
 
@@ -9,16 +9,17 @@ interface Props {
 }
 
 export default function RootElement(props: Props) {
-	const drop = useDroppable({
-		id: props.data.id,
-		data: {
-			data: {...props.data},
-			path: props.path
+	const classes = useMemo(() => {
+		if (props.data && props.data.classes) {
+			return  Object.values(props.data.classes).join(' ').concat(' ')
+		} else {
+			return '';
 		}
-	});
+
+	}, []);
 
 	return (
-		<div ref={drop.setNodeRef} className="h-full">
+		<div className={`min-h-screen pb-5${classes}`}>
 			Root {props.path}
 			{props.children}
 		</div>
