@@ -1,6 +1,5 @@
-import { ReactNode, useMemo } from "react"
-import { TreeNode, TreeType } from "../core/TreeNode"
-import { useDroppable } from "@dnd-kit/core";
+import { memo, ReactNode, useMemo } from "react"
+import { TreeType } from "../core/TreeNode"
 
 interface Props {
 	data: TreeType,
@@ -8,7 +7,7 @@ interface Props {
 	children: ReactNode
 }
 
-export default function ColElement(props: Props) {
+export default memo(function ColElement(props: Props) {
 	const classes = useMemo(() => {
 		if (props.data && props.data.classes) {
 			return  Object.values(props.data.classes).join(' ')
@@ -17,10 +16,11 @@ export default function ColElement(props: Props) {
 		}
 
 	}, []);
+	console.log('Render Col')
 
 	return (
 		<div className={`${classes}`}>
 			{props.children}
 		</div>
-	)
-}
+	);
+})

@@ -23,7 +23,7 @@ export class TreeNode {
 	}
 
 	addNode(path:string | undefined, node: TreeType){
-		let parent:TreeType | undefined = eval(`this._data${path}`);
+		const parent:TreeType | undefined = eval(`this._data${path}`);
 		node.id = this.generateId();
 
 		if (parent) {

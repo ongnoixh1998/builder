@@ -1,15 +1,16 @@
 'use client'
-import { Active, DndContext, DragEndEvent, DragOverlay, DragStartEvent } from "@dnd-kit/core";
+import { Active, DndContext, DragEndEvent, DragOverlay, DragStartEvent, MouseSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { ToolbarType } from "./type/ToolbarType";
-import { useMemo, useState } from "react";
-import BuilderToolbar from "./toolbar/BuilderToolbar";
+import { useState } from "react";
 import { FaBuffer } from "react-icons/fa6";
 import { BsLayoutThreeColumns } from "react-icons/bs";
 import { FiMove } from "react-icons/fi";
 import BuilderContent from "./BuilderContent";
-import { TreeNode, TreeType } from "./core/TreeNode";
+import BuilderToolbar from "./BuilderToolbar";
+import useBuilder from "./hooks/useBuilder";
 
 export default function Builder() {
+	const builder = useBuilder();
 	const [active, setActive] = useState<Active>();
 
 	const [toolbar, setToolbar] = useState<ToolbarType>({
@@ -22,47 +23,37 @@ export default function Builder() {
 				name: 'Add Element',
 				icon: FaBuffer,
 				type: 'AddElement',
-				addons: [
+				categories: [
 					{
-						name: 'Row',
-						group: 'Layout',
-						icon: BsLayoutThreeColumns,
-						classes: {
-							height: 'min-h-20',
-							padding: 'pt-2 pb-2'
-						}
-					},
-					{
-						name: 'Col',
-						group: 'Layout',
-						icon: BsLayoutThreeColumns
-					},
+						category: 'Layout',
+						title: 'Layout',
+						addons: [
+							{
+								name: 'Row',
+								group: 'Layout',
+								icon: BsLayoutThreeColumns,
+								classes: {
+									height: 'min-h-20',
+									padding: 'pt-10 pb-10'
+								}
+							},
+							{
+								name: 'Col',
+								group: 'Layout',
+								icon: BsLayoutThreeColumns
+							},
+						]
+					}
+
 				]
 			},
 			{
 				name: 'Layout',
 				icon: FaBuffer,
 				type: 'Layout',
-				addons: [
-					{
-						name: 'Row',
-						group: 'Layout',
-						icon: BsLayoutThreeColumns,
-						component: ''
-					}
-				]
 			}
 		]
 	});
-
-	const [data, setData] = useState<TreeType>({
-		id: 'root',
-		type: 'Root'
-	});
-
-	const treeNode = useMemo<TreeNode>(() => {
-		return new TreeNode(data, setData);
-	}, []);
 
 	const onDragStart = (e:DragStartEvent) => {
 		setActive(e.active);
@@ -77,17 +68,16 @@ export default function Builder() {
 		}
 
 		if (e.active?.data?.current?.group == 'addon') {
-			treeNode.addNode(e.over?.data?.current?.path, {
+			builder.treeNode?.addNode(e.over?.data?.current?.path, {
 				id: '',
 				type: e.active?.data?.current?.type,
 				classes: e.active?.data?.current?.classes
 			})
 		}
-		console.log(e.active, e.over)
 	}
 
 	const getDragOverLay = () => {
-		if (active && active.id === 'toolbar') {
+		if (active && (active.id === 'toolbar' || active.id === 'DetailElement')) {
 			return null;
 		}
 
@@ -100,11 +90,18 @@ export default function Builder() {
 		)
 	}
 
+	const mouseSensor = useSensor(MouseSensor, {
+		// Require the mouse to move by 50 pixels before activating
+		activationConstraint: {
+		  distance: 50,
+		},
+	});
+
 	return (
-		<DndContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
+		<DndContext onDragEnd={onDragEnd} onDragStart={onDragStart} sensors={[mouseSensor]}>
 			<BuilderToolbar coordinate={toolbar.coordinate} tools={toolbar.tools}/>
 			{getDragOverLay()}
-			<BuilderContent data={data}/>
+			<BuilderContent data={builder.data}/>
 		</DndContext>
 	)
 }

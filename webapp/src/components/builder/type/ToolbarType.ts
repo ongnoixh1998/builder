@@ -6,11 +6,18 @@ export interface AddonType {
 	classes?:any
 }
 
+export interface AddonCategoryType {
+	category: string,
+	title:string,
+	addons: AddonType[]
+
+}
+
 export interface Tool {
 	name: string,
 	icon: any,
 	type:string,
-	addons?: AddonType[]
+	categories?: AddonCategoryType[]
 }
 
 export interface ToolbarType {

@@ -19,9 +19,9 @@ export default function Addon(props: Props) {
 	});
 	
 	return (
-		<div ref={drag.setNodeRef} {...drag.attributes} {...drag.listeners} className="flex gap-1 items-center p-1 border-l">
+		<div ref={drag.setNodeRef} {...drag.attributes} {...drag.listeners} className="flex gap-1 items-center p-1">
 			<props.icon size={25}/>
-			<span className="font-bold select-none">{props.name}</span>
+			<span className="select-none">{props.name}</span>
 		</div>
 	)
 }

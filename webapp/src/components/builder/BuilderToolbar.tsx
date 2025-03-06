@@ -1,13 +1,14 @@
 'use client'
 import { useDraggable } from "@dnd-kit/core";
-import { Tool, ToolbarType } from "../type/ToolbarType";
 import { CSSProperties, useState } from "react";
 import { PiDotsSixThin } from "react-icons/pi";
-import Addon from "./Addon";
+import { Tool, ToolbarType } from "./type/ToolbarType";
+import Addon from "./toolbar/Addon";
 
 interface Props extends ToolbarType {
-
+	expand?:string
 }
+
 export default function BuilderToolbar (props: Props) {
 	const [showDetail, setShowDetail] = useState<Tool | null>();
 
@@ -31,12 +32,23 @@ export default function BuilderToolbar (props: Props) {
 	const getDetailView = () => {
 		if (showDetail?.type =='AddElement') {
 			return (
-				<div className="absolute top-0 rounded translate-x-1 left-full w-64 h-fit bg-sky-500 grid grid-cols-2">
+				<div className="absolute top-0 rounded translate-x-1 left-full w-64 h-fit border shadow-lg z-20">
 					{
-						showDetail.addons?.map((addon, idx) => {
+						showDetail.categories?.map((category, idx) => {
 							return (
-								<Addon {...addon} key={idx}/>
-							)
+								<div className="w-full p-2" key={idx}>
+									<span className="border-b w-full block mb-2">{category.title}</span>
+									<div className="grid grid-cols-2 items-center justify-center">
+										{
+											category.addons.map((addon, aidx) => {
+												return (
+													<Addon {...addon} key={aidx}/>
+												)
+											})
+										}
+									</div>
+								</div>
+							);
 						})
 					}
 				</div>
@@ -47,7 +59,7 @@ export default function BuilderToolbar (props: Props) {
 	}
 
 	return (
-		<div className="relative bg-sky-500 w-32 h-fit rounded p-2" style={{...style, top: props.coordinate?.y, left: props.coordinate?.x, position: 'absolute'}}>
+		<div className="relative border shadow-lg w-32 h-fit rounded p-2 text-black bg-white z-20" style={{...style, top: props.coordinate?.y, left: props.coordinate?.x, position: 'absolute'}}>
 			<div className="flex flex-col gap-2" >
 				<div ref={drag.setNodeRef} {...drag.listeners} {...drag.attributes} className="border-b flex flex-col items-center justify-center">
 					<PiDotsSixThin size={30}/>
@@ -55,10 +67,11 @@ export default function BuilderToolbar (props: Props) {
 
 				{
 					props.tools?.map((tool, idx) => {
+
 						return (
-							<div className="w-full h-14 border-b last:border-none flex flex-col items-center justify-center cursor-pointer" onClick={() => handleAction(tool)} key={idx}>
+							<div className="w-full h-14 last:border-none flex flex-col items-center justify-center cursor-pointer" onClick={() => handleAction(tool)} key={idx}>
 								<tool.icon size={30}/>
-								<span className="font-bold select-none">{tool.name}</span>
+								<span className="select-none">{tool.name}</span>
 							</div>
 						)
 					})

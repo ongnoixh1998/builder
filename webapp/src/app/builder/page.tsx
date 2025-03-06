@@ -1,7 +1,7 @@
-import Builder from "@/components/builder/Builder";
+import WrapperBuilder from "@/components/builder/WrapperBuilder";
 
 export default function BuilderPage() {
 	return (
-		<Builder/>
+		<WrapperBuilder/>
 	)
 }

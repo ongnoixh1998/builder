@@ -1,4 +1,4 @@
-import { ReactNode, useMemo } from "react"
+import { memo, ReactNode, useMemo } from "react"
 import { TreeType } from "../core/TreeNode"
 
 interface Props {
@@ -7,7 +7,7 @@ interface Props {
 	children: ReactNode
 }
 
-export default function RootElement(props: Props) {
+export default memo(function RootElement(props: Props) {
 	const classes = useMemo(() => {
 		if (props.data && props.data.classes) {
 			return  Object.values(props.data.classes).join(' ').concat(' ')
@@ -21,5 +21,5 @@ export default function RootElement(props: Props) {
 		<div className={`min-h-screen pb-5${classes}`}>
 			{props.children}
 		</div>
-	)
-}
+	);
+})

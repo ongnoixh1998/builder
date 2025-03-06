@@ -1,4 +1,4 @@
-import { ReactNode, useMemo } from "react"
+import { memo, ReactNode, useMemo, useRef } from "react"
 import { TreeNode, TreeType } from "../core/TreeNode"
 import { useDroppable } from "@dnd-kit/core";
 
@@ -8,7 +8,9 @@ interface Props {
 	children: ReactNode
 }
 
-export default function RowElement(props: Props) {
+export default memo(function RowElement(props: Props) {
+	const ref = useRef(null);
+
 	const classes = useMemo(() => {
 		if (props.data && props.data.classes) {
 			return  Object.values(props.data.classes).join(' ')
@@ -19,8 +21,8 @@ export default function RowElement(props: Props) {
 	}, []);
 
 	return (
-		<div className={`${classes}`}>
+		<div ref={ref} className={`${classes}`}>
 			{props.children}
 		</div>
-	)
-}
+	);
+})

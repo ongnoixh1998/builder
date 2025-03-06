@@ -1,5 +1,5 @@
 import BaseElement from "./components/BaseElement"
-import { TreeNode, TreeType } from "./core/TreeNode"
+import { TreeType } from "./core/TreeNode"
 
 interface Props {
 	data?: TreeType

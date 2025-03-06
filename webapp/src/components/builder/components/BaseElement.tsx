@@ -1,3 +1,4 @@
+import { memo } from "react";
 import BuilderElement from "../core/BuilderElement"
 import { TreeType } from "../core/TreeNode"
 import DragDropElement from "./DragDropElement";
@@ -7,7 +8,7 @@ interface Props {
 	path: string
 }
 
-export default function BaseElement(props: Props) {
+export default memo(function BaseElement(props: Props) {
 	const WithElement = (data?:TreeType) => {
 		if (!data)return null;
 
@@ -17,14 +18,14 @@ export default function BaseElement(props: Props) {
 		});
 
 		return (
-			<DragDropElement {...{data: {...data}, path: props.path}} key={props.path}>
-				<El {...{data: {...data}, path: props.path}} key={props.path}>
+			<DragDropElement {...{data: data, path: props.path}} key={props.path}>
+				<El {...{data: data, path: props.path}} key={props.path}>
 					{children}
 				</El>
 			</DragDropElement>
 
-		)
+		);
 	}
 
 	return WithElement(props.data);
-}
+})
