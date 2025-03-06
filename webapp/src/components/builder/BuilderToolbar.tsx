@@ -32,7 +32,7 @@ export default function BuilderToolbar (props: Props) {
 	const getDetailView = () => {
 		if (showDetail?.type =='AddElement') {
 			return (
-				<div className="absolute top-0 rounded translate-x-1 left-full w-64 h-fit border shadow-lg z-20">
+				<div className="absolute top-0 rounded translate-x-1 left-full w-64 h-fit border shadow-lg bg-white z-20">
 					{
 						showDetail.categories?.map((category, idx) => {
 							return (
