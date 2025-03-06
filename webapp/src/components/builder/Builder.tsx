@@ -1,5 +1,5 @@
 'use client'
-import { Active, DndContext, DragEndEvent, DragOverlay, DragStartEvent, MouseSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { Active, DndContext, DragEndEvent, DragOverlay, DragStartEvent, MouseSensor, useSensor } from "@dnd-kit/core";
 import { ToolbarType } from "./type/ToolbarType";
 import { useState } from "react";
 import { FaBuffer } from "react-icons/fa6";

@@ -1,6 +1,5 @@
 import { memo, ReactNode, useMemo, useRef } from "react"
-import { TreeNode, TreeType } from "../core/TreeNode"
-import { useDroppable } from "@dnd-kit/core";
+import { TreeType } from "../core/TreeNode"
 
 interface Props {
 	data: TreeType,

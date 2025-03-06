@@ -1,7 +1,6 @@
 import { useDroppable } from "@dnd-kit/core";
-import BuilderElement from "../core/BuilderElement"
 import { TreeType } from "../core/TreeNode"
-import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 
 interface Props {
 	data: TreeType,
@@ -68,7 +67,7 @@ export default function DragDropElement(props: Props) {
 			} else {
 				setHover(false);
 			}
-		}} onMouseLeave={(e:React.MouseEvent) => {
+		}} onMouseLeave={() => {
 			setHover(false)
 		}}>
 			{props.children}

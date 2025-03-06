@@ -38,15 +38,15 @@ export class TreeNode {
 	}
 
 	moveNode(from:string, to:string) {
-
+		console.log(from, to)
 	}
 
 	removeNode(path:string) {
-
+		console.log(path)
 	}
 
 	updateNode(path:string, data: any){
-
+		console.log(path, data)
 	}
 
 	generateId() {
