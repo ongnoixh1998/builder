@@ -33,6 +33,7 @@ export default function Builder() {
 								group: 'Layout',
 								icon: BsLayoutThreeColumns,
 								classes: {
+									grid:'grid grid-cols-2 gap-1',
 									height: 'min-h-20',
 									padding: 'pt-10 pb-10'
 								}
@@ -40,7 +41,11 @@ export default function Builder() {
 							{
 								name: 'Col',
 								group: 'Layout',
-								icon: BsLayoutThreeColumns
+								icon: BsLayoutThreeColumns,
+								classes: {
+									height: 'min-h-20 bg-black/40',
+									padding: 'pt-10 pb-10'
+								}
 							},
 						]
 					}
@@ -65,6 +70,8 @@ export default function Builder() {
 				x: toolbar.coordinate.x + e.delta.x,
 				y: toolbar.coordinate.y + e.delta.y
 			}});
+
+			return;
 		}
 
 		if (e.active?.data?.current?.group == 'addon') {
@@ -72,7 +79,20 @@ export default function Builder() {
 				id: '',
 				type: e.active?.data?.current?.type,
 				classes: e.active?.data?.current?.classes
-			})
+			});
+
+			return;
+		}
+		console.log(e.active, e.over);
+
+		// if (e.active?.data?.current && e.over?.data?.current && e.active?.data?.current?.sortable?.containerId != e.over?.data?.current?.sortable?.containerId) {
+		// 	builder.treeNode?.moveNode(e.active?.data?.current?.path, e.over?.data?.current?.path);
+
+		// 	return;
+		// }
+
+		if (e.active?.data?.current && e.over?.data?.current && e.active?.data?.current?.sortable?.containerId == e.over?.data?.current?.sortable?.containerId) {
+			builder.treeNode?.swapNode(e.active?.data?.current?.path, e.over?.data?.current?.path)
 		}
 	}
 

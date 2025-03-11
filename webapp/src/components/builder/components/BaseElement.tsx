@@ -2,6 +2,7 @@ import { memo } from "react";
 import BuilderElement from "../core/BuilderElement"
 import { TreeType } from "../core/TreeNode"
 import DragDropElement from "./DragDropElement";
+import { SortableContext } from "@dnd-kit/sortable";
 
 interface Props {
 	data?: TreeType,
@@ -20,7 +21,14 @@ export default memo(function BaseElement(props: Props) {
 		return (
 			<DragDropElement {...{data: data, path: props.path}} key={props.path}>
 				<El {...{data: data, path: props.path}} key={props.path}>
-					{children}
+					{
+							data.children
+						?	<SortableContext items={data.children ? data.children.map(child => child.id): []}>
+								{children}
+							</SortableContext>
+						:	null
+					}
+
 				</El>
 			</DragDropElement>
 

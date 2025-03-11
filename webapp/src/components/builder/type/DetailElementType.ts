@@ -1,7 +1,7 @@
 import { TreeType } from "../core/TreeNode";
 
 export interface DetailElementType {
-	element: TreeType,
+	element: TreeType | null,
 	path:string,
 	isOpen:boolean,
 	coordinate: {

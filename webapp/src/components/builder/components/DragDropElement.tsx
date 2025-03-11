@@ -1,6 +1,8 @@
 import { useDroppable } from "@dnd-kit/core";
 import { TreeType } from "../core/TreeNode"
 import { ReactNode, useEffect, useMemo, useState } from "react";
+import { useSortable } from "@dnd-kit/sortable";
+import {CSS} from '@dnd-kit/utilities';
 
 interface Props {
 	data: TreeType,
@@ -35,6 +37,18 @@ export default function DragDropElement(props: Props) {
 		}
 	});
 
+	const drag = useSortable({
+		id: props.data.id,
+		data: {
+			data: {...props.data},
+			path: props.path
+		}
+	});
+
+	const dragStyle = {
+		transform: CSS.Transform.toString(drag.transform)
+	};
+
 	const isOver = () => {
 		if (drop.active?.id !== 'toolbar' && drop.active?.id !== 'DetailElement') {
 			return drop.isOver ? " before:content-[''] relative before:-z-10 before:absolute before:w-full before:h-full before:p-2 before:border-4 before:border-dotted before:border-amber-600 " : ''
@@ -49,28 +63,44 @@ export default function DragDropElement(props: Props) {
 		setActive(true);
 	}
 
-	const isHover = useMemo(() => {
-		return props.data.id !== 'root' && hover ? " before:content-[''] relative before:-z-10 before:absolute before:w-full before:h-full before:p-2 before:border-4 before:border-dotted before:border-amber-600 " : ""
-	}, [hover]);
+	const style= useMemo(() => {
+		if (active) {
+			return 'block border-blue-500'
+		} else if (hover) {
+			return 'block border-red-500'
+		}
 
-	const isActive= useMemo(() => {
-		return props.data.id !== 'root' && active ? " before:content-[''] relative before:-z-10 before:absolute before:w-full before:h-full before:p-2 before:border-4 before:border-dotted before:border-amber-600 " : ""
-	}, [active]);
+		return 'hidden'
+	}, [hover, active]);
 
 	return (
-		<div ref={(e) => {
+		<div {...drag.attributes} {...drag.listeners} style={dragStyle} ref={(e) => {
 			drop.setNodeRef(e);
+			drag.setNodeRef(e);
 			setRef(e);
-		} } className={`h-auto${isOver()}${isHover}${isActive} z-10`} onClick={handleClick} onMouseOver={(e) => {
-			if (e.target == e.currentTarget.firstChild) {
+		} } className={`h-auto${isOver()} z-10 wrap relative`} data-id={props.data.id} onClick={handleClick} onMouseOver={(e) => {
+			const targetEl = e.target as HTMLElement;
+			const curEl = e.currentTarget as HTMLElement;
+			const wrap = targetEl.closest('.wrap');
+
+			if (targetEl == curEl.firstChild || (wrap?.getAttribute('data-id') == curEl.getAttribute('data-id'))) {
 				setHover(true);
 			} else {
 				setHover(false);
 			}
+
 		}} onMouseLeave={() => {
 			setHover(false)
 		}}>
 			{props.children}
+			{
+					props.data.id != 'root'
+				?	<div  data-id={props.data.id} className={`${style} border w-full h-full absolute top-0 left-0`}>
+
+					</div>
+				:	null
+			}
+
 		</div>
 	)
 }

@@ -16,11 +16,11 @@ export default memo(function ColElement(props: Props) {
 		}
 
 	}, []);
-	console.log('Render Col')
 
 	return (
 		<div className={`${classes}`}>
 			{props.children}
+			{props.data.id}
 		</div>
 	);
 })

@@ -14,6 +14,10 @@ export class TreeNode {
 		this._updateView = updateView;
 	}
 
+	updateView() {
+		this._updateView({...this._data});
+	}
+
 	getId():string {
 		if (this._data && this._data.id) {
 			return this._data.id;
@@ -37,8 +41,43 @@ export class TreeNode {
 		this._updateView({...this._data})
 	}
 
+	getParentPath(path:string) {
+		const pathArr= path.split('.');
+
+		return pathArr.filter((value, idx) => idx != pathArr.length - 1).join('.')
+	}
+
 	moveNode(from:string, to:string) {
-		console.log(from, to)
+		const fromNode = eval(`this._data${from}`);
+		const parentPath = this.getParentPath(from);
+		const parentNode:TreeType =  eval(`this._data${parentPath}`);
+
+		if (parentNode && parentNode.children) {
+			parentNode.children = parentNode.children.filter(item => item != fromNode)
+		}
+
+		const toNode:TreeType | undefined = eval(`this._data${to}`);
+
+		if (toNode) {
+			if (toNode.children) {
+				toNode.children.push(fromNode);
+			} else {
+				toNode.children = [fromNode];
+			}
+		}
+
+		this._updateView({...this._data});
+	}
+
+	swapNode(from:string, to:string) {
+		const temp:TreeType | undefined = eval(`this._data${to}`);
+
+		if (temp) {
+			eval(`this._data${from} = this._data${to}`);
+			eval(`this._data${to} = temp`);
+		}
+
+		this.updateView();
 	}
 
 	removeNode(path:string) {
